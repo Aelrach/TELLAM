@@ -30,7 +30,7 @@ function show_help {
     echo "  -full       [0,1], Proportion of consensus size above which the loci is considered full_length (default is 0.9)"
     echo
     echo "Example:"
-    echo "  $(basename $0) -d results.csv -b /path/to/bam/ -name AZA -control DMSO -elements LTR -focus 1 -focus_list specific_elements.txt"
+    echo "  $(basename $0) -d DESEQ.txt -state f -fb path_to_filtered_bam -chr chr -name AZA -control DMSO -elements 'L1:LINE',LTR -annotation path_to_TE_locus_annotation"
     exit 1
 }
 
@@ -134,5 +134,7 @@ echo "Configuration file created at $config_file"
 echo "Launching the Python pipeline..."
 
 # Launch the Python script with the configuration file
-python3 "$script_dir/TELLAM.py" "$config_file"
+python="${command -v python}"
+$python "$script_dir/TELLAM.py" "$config_file"
 
+echo "Pipeline completed."
