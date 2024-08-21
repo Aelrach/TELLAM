@@ -105,7 +105,7 @@ if [ "$bam_state" -eq "r" ]; then
     # Make Forward and Reverse bam files
     bash $script_dir/launchFastSplit.sh $script_dir $directory $filtered_bam_folder $threads
     wait $!
-
+fi
 # Create the configuration table for the Python script
 config_file="$directory/config.txt"
 cat > "$config_file" <<EOL
@@ -118,12 +118,13 @@ CONTROL_NAME=$control_name
 ELEMENT_PATTERN=$element_pattern
 ANNOTATION=$annotation
 RAW_FOLDER=$raw_bam_folder
+EXONS=$exons_bed
 THREADS=$threads
 FILTERED_FOLDER=$filtered_bam_folder
 DIRECTORY=$directory
 CONSENSUS=$consensus
 WINDOW=$window
-context=$context
+CONTEXT=$context
 SIZE=$size
 COVERAGE=$coverage
 FULL=$full
