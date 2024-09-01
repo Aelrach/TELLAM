@@ -301,8 +301,8 @@ def getBAM(filtered_bam_folder):
         A list of dictionaries with keys: 'sample', 'fwd', 'rev'.
     """
     listdir_filtered = os.listdir(filtered_bam_folder)
-    listdir_fwd = [file for file in listdir_filtered if 'fwd' in file]
-    listdir_rev = [file for file in listdir_filtered if 'rev' in file]
+    listdir_fwd = [file for file in listdir_filtered if 'fwd' in file and 'bai' not in file]
+    listdir_rev = [file for file in listdir_filtered if 'rev' in file and 'bai' not in file]
     
     assert len(listdir_fwd) == len(listdir_rev), "Number of Forward and Reverse bam files do not match"
     dico_L = []
