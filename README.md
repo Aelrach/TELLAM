@@ -24,8 +24,9 @@ cd TELLAM
 It's recommended to use a virtual environment to manage dependencies:
 
 ```bash
-conda -n name_of_your_venv python=2.7
+conda -n name_of_your_venv
 conda activate name_of_your_venv
+conda install python=2.7
 pip install -r requirements.txt
 ```
 
