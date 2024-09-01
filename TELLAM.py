@@ -282,7 +282,7 @@ def makeNiceDESEQ(deseq2_table, annotation, element_pattern, directory, conditio
 
     niceDESEQ['score'] = score.values
 
-    Focus = element_pattern[0] if len(element_pattern) == 1 else str(element_pattern[0]) + '_' + str(element_pattern[-1])
+    Focus = str(element_pattern[0]) if len(element_pattern) == 1 else str(element_pattern[0]) + '_' + str(element_pattern[-1])
     if ':' in Focus:
         Focus.replace(':', '_')
     if ' ' in Focus:
@@ -771,7 +771,6 @@ def run_pipeline(config):
     condition_name = config.get('CONDITION_NAME')
     control_name = config.get('CONTROL_NAME')
     element_pattern = config.get('ELEMENT_PATTERN').split(',')
-    print(':' in element_pattern[0])
     filtered_bam_folder = config.get('FILTERED_FOLDER')
     directory = config.get('DIRECTORY')
     annotation = config.get('ANNOTATION')
