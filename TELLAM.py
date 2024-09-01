@@ -283,11 +283,11 @@ def makeNiceDESEQ(deseq2_table, annotation, element_pattern, directory, conditio
     niceDESEQ['score'] = score.values
 
     Focus = element_pattern[0] if len(element_pattern) == 1 else str(element_pattern[0]) + '_' + str(element_pattern[-1])
-    print(Focus)
     if ':' in Focus:
         Focus.replace(':', '_')
     if ' ' in Focus:
         Focus.replace(' ', '_')
+    print(Focus)
     if directory[-1] == '/':
         directory = directory[:-1]
     niceDESEQ.to_csv(f"{directory}/{Focus}_{condition}vs{control}.txt", sep='\t', index=False)
