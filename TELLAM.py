@@ -282,6 +282,8 @@ def makeNiceDESEQ(deseq2_table, annotation, element_pattern, directory, conditio
     niceDESEQ['score'] = score.values
 
     Focus = element_pattern[0] if len(element_pattern) == 1 else str(element_pattern[0]) + '_' + str(element_pattern[-1])
+    if ':' in Focus:
+        Focus.replace(':', '_')
     if directory[-1] == '/':
         directory = directory[:-1]
     niceDESEQ.to_csv(f"{directory}/{Focus}_{condition}vs{control}.txt", sep='\t', index=False)
@@ -414,7 +416,7 @@ def computeMetric(row, sample_List, window, decrease_indicator, prefix):
         sample = sample_List[i]
         
         L.append(getCoverage(woi_5, sample['fwd'], sample['rev'], prefix=prefix))
-    
+    print(L)
     score5 = np.mean(np.array(L) + 1)
         
     L =[]
