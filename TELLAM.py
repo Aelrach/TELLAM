@@ -479,22 +479,11 @@ def makeGenomicContextTable(loci_table, sample_List, window, prefix, decrease_3v
     pd.DataFrame
         DataFrame containing computed genomic context scores.
     """
-    import dask.dataframe as dd
-
-    # Convert your pandas DataFrame to a dask DataFrame
-    dask_df = dd.from_pandas(loci_table, npartitions=4)
-    
-    # Apply the function in parallel
-    MetricVector = dask_df.apply(computeMetric, axis=1,
-                                 sample_List=sample_List,
-                                 window=window,
-                                 prefix=prefix,
-                                 decrease_indicator=decrease_3v5).compute()
-    #MetricVector = pd.DataFrame(loci_table.swifter.apply(computeMetric, axis=1, 
-    #                                  sample_List=sample_List,
-    #                                  window=window,
-    #                                  prefix=prefix,
-    #                                  decrease_indicator=decrease_3v5))
+    MetricVector = pd.DataFrame(loci_table.swifter.apply(computeMetric, axis=1, 
+                                      sample_List=sample_List,
+                                      window=window,
+                                      prefix=prefix,
+                                      decrease_indicator=decrease_3v5))
     
     scores5 = MetricVector.swifter.apply(getTupleInfo, axis=1, INDEX=0)
     scores3 = MetricVector.swifter.apply(getTupleInfo, axis=1, INDEX=1)
