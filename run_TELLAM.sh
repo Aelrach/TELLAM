@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Get the directory where the script is located
-script_dir=$(dirname "$(pwd "${BASH_SOURCE[0]}")")
+script_dir=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
 
 # Function to display the help message
 function show_help {
