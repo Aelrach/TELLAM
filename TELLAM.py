@@ -283,6 +283,7 @@ def makeNiceDESEQ(deseq2_table, annotation, element_pattern, directory, conditio
     niceDESEQ['score'] = score.values
 
     Focus = element_pattern[0] if len(element_pattern) == 1 else str(element_pattern[0]) + '_' + str(element_pattern[-1])
+    print(Focus)
     if ':' in Focus:
         Focus.replace(':', '_')
     if ' ' in Focus:
