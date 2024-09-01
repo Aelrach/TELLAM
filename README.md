@@ -29,7 +29,7 @@ conda activate TELLAM
 conda install python=3.10
 pip install -r requirements.txt
 ```
-
+Nice step-by-step tutorial on how to get miniconda up and running from the command line : https://medium.com/@rajiitmandi21/installing-miniconda-and-setting-up-conda-environments-on-linux-0c114e76a324
 # Usage
 Usage: 
 ```bash
