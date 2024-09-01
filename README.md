@@ -30,7 +30,7 @@ pip install -r requirements.txt
 ```
 
 # Usage
-Usage:: 
+Usage: 
 ```bash
 bash run_TELLAM.sh -d <deseq2_table> -state <bam_state> -chr <chr_prefix> -name <condition_name> -control <control_name> -elements <element_pattern> -annotation <annotation> [options]
 ```
