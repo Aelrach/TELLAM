@@ -4,7 +4,7 @@ Pipeline for Transposable Elements Locus Level Analysis. Created to analyze resu
 # Requirements
 - bedtools
 - samtools
-- python 2.7
+- python 3.10
 - The following python libraries :
   - numpy
   - pandas
