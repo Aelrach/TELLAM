@@ -691,10 +691,7 @@ def makeTable(deseq, sample_dico, window, prefix, decrease_3v5, consensus_dico, 
     
     Table["3v5_effect"] = context["3v5_effect"]
     
-    # m = np.min(context["MeanCoverage"])
-    # M = np.max(context["MeanCoverage"])
-    
-    Table["MeanCoverage"] = context["MeanCoverage"] #(context["MeanCoverage"] - m)/(M - m)
+    Table["MeanCoverage"] = context["MeanCoverage"] 
     Table["Coverage_effect"] = vec_transformCoverage(Table["MeanCoverage"], coverage_threshold)
     print(f"Finished. Computation time is {time.time()-debut} seconds.\n")
     
