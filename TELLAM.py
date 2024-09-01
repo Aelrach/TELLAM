@@ -12,6 +12,7 @@ import numpy as np
 import pickle as pkl
 from Bio import SeqIO
 import pysam
+import swifter
 import time
 import re
 import os
@@ -76,7 +77,7 @@ def clean_vector(vector, query, n=1, keep="before"):
             return element[:match.start()]
         else:
             return element[match.end():]
-    return vector.apply(clean_element)
+    return vector.swifter.apply(clean_element)
 
 def remove_pos(vector, n):
     """
@@ -478,16 +479,16 @@ def makeGenomicContextTable(loci_table, sample_List, window, prefix, decrease_3v
     pd.DataFrame
         DataFrame containing computed genomic context scores.
     """
-    MetricVector = pd.DataFrame(loci_table.apply(computeMetric, axis=1, 
+    MetricVector = pd.DataFrame(loci_table.swifter.swifter.apply(computeMetric, axis=1, 
                                       sample_List=sample_List,
                                       window=window,
                                       prefix=prefix,
                                       decrease_indicator=decrease_3v5))
     
-    scores5 = MetricVector.apply(getTupleInfo, axis=1, INDEX=0)
-    scores3 = MetricVector.apply(getTupleInfo, axis=1, INDEX=1)
-    ratio = MetricVector.apply(getTupleInfo, axis=1, INDEX=2)
-    coverage = MetricVector.apply(getTupleInfo, axis=1, INDEX=3)
+    scores5 = MetricVector.swifter.apply(getTupleInfo, axis=1, INDEX=0)
+    scores3 = MetricVector.swifter.apply(getTupleInfo, axis=1, INDEX=1)
+    ratio = MetricVector.swifter.apply(getTupleInfo, axis=1, INDEX=2)
+    coverage = MetricVector.swifter.apply(getTupleInfo, axis=1, INDEX=3)
     
     dico = {"5prime":scores5, "3prime":scores3, "3v5_effect":ratio, "MeanCoverage":coverage}
     return pd.DataFrame(data=dico)
@@ -703,8 +704,8 @@ def makeTable(deseq, sample_dico, window, prefix, decrease_3v5, consensus_dico, 
     
     print("Processing length informations of loci..")
     debut = time.time()
-    Table["size_ratio"] = Table.apply(getSizeRatio, axis=1, ref=consensus_dico)
-    Table["full_length"] = Table.apply(IsFull, axis=1, ref=consensus_dico, coeff=full_length_threshold)
+    Table["size_ratio"] = Table.swifter.apply(getSizeRatio, axis=1, ref=consensus_dico)
+    Table["full_length"] = Table.swifter.apply(IsFull, axis=1, ref=consensus_dico, coeff=full_length_threshold)
     Table["size_effect"] = vec_transformSize(Table["size_ratio"], size_threshold)
     print(f"Finished. Computation time is {time.time()-debut} seconds.\n")
     
