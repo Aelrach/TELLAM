@@ -771,7 +771,7 @@ def run_pipeline(config):
     condition_name = config.get('CONDITION_NAME')
     control_name = config.get('CONTROL_NAME')
     element_pattern = config.get('ELEMENT_PATTERN').split(',')
-    print(':' in element_pattern)
+    print(':' in element_pattern[0])
     filtered_bam_folder = config.get('FILTERED_FOLDER')
     directory = config.get('DIRECTORY')
     annotation = config.get('ANNOTATION')
