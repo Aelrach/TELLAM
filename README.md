@@ -4,7 +4,7 @@ Pipeline for Transposable Elements Locus Level Analysis. Created to analyze resu
 # Requirements
 - bedtools
 - samtools
-- python
+- python 2.7
 - The following python libraries :
   - numpy
   - pandas
@@ -24,8 +24,8 @@ cd TELLAM
 It's recommended to use a virtual environment to manage dependencies:
 
 ```bash
-python -m venv name_of_your_venv
-source name_of_your_venv/bin/activate
+conda -n name_of_your_venv python=2.7
+conda activate name_of_your_venv
 pip install -r requirements.txt
 ```
 
