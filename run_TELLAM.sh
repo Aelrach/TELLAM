@@ -16,10 +16,10 @@ function show_help {
     echo "  -elements   List of patterns found in the IDs of the annotation file used to filter rows of deseq2 table (e.g., 'LTR')"
     echo
     echo "Optional arguments:"
-    echo "  -raw        Must be set if -state is 'r', Path to the folder containing all raw bam files"
+    echo "  -raw        Must be set if -state is 'r', Path to the folder containing all TREATED CONDITION ONLY raw bam files"
     echo "  -exons      Must be set if -state is 'r', Path to the bed file containing all exons of genome. VERIFY that chromosome naming of this file and that of your bam files match"
     echo "  -threads    Number of threads to use if -state is set to 'r' (default is 8)"
-    echo "  -fb         Must be set if -state is 'f', Path to the folder containing all forward and reverse bam files"
+    echo "  -fb         Must be set if -state is 'f', Path to the folder containing all TREATED CONDITION ONLY forward and reverse bam files"
     echo "  -directory  Project directory to save files (default is \${name}_TELLAM)"
     echo "  -annotation Path to the annotation file (default is 'TELLAM/GRCh38_Ensembl_rmsk_TE.gtf.locInd.locations')"
     echo "  -consensus  Path to the consensus fasta file (default is 'TELLAM/UCSC_TE_consensus.fa.txt')"
