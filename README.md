@@ -16,8 +16,8 @@ Pipeline for Transposable Elements Locus Level Analysis. Created to analyze resu
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/your-repo-name.git
-cd your-repo-name
+git clone https://github.com/Aelrach/TELLAM.git
+cd TELLAM
 ```
 ### 2. Create a Virtual Environment
 
