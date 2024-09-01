@@ -479,11 +479,19 @@ def makeGenomicContextTable(loci_table, sample_List, window, prefix, decrease_3v
     pd.DataFrame
         DataFrame containing computed genomic context scores.
     """
-    MetricVector = pd.DataFrame(loci_table.swifter.apply(computeMetric, axis=1, 
-                                      sample_List=sample_List,
-                                      window=window,
-                                      prefix=prefix,
-                                      decrease_indicator=decrease_3v5))
+    from joblib import Parallel, delayed
+
+    # Function that applies computation to a single row
+    def process_row(row):
+        return computeMetric(row, sample_List=sample_List, window=window, prefix=prefix, decrease_indicator=decrease_3v5)
+    
+    # Parallel processing with joblib
+    MetricVector = pd.DataFrame(Parallel(n_jobs=4)(delayed(process_row)(row) for _, row in loci_table.iterrows()))
+    #MetricVector = pd.DataFrame(loci_table.swifter.apply(computeMetric, axis=1, 
+    #                                  sample_List=sample_List,
+    #                                  window=window,
+    #                                  prefix=prefix,
+    #                                  decrease_indicator=decrease_3v5))
     
     scores5 = MetricVector.swifter.apply(getTupleInfo, axis=1, INDEX=0)
     scores3 = MetricVector.swifter.apply(getTupleInfo, axis=1, INDEX=1)
