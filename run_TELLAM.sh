@@ -87,7 +87,7 @@ if [ "$bam_state" = "r" ] && [ -z "$exons_bed" ]; then
      show_help
 fi
 
-if [ "$bam_state" = "f" ] && [ -z "$fwd_bam_folder" ]; then
+if [ "$bam_state" = "f" ] && [ -z "$filtered_bam_folder" ]; then
      echo "Error: -state is set to 'f' but -fb not defined. Pass to -fb argument the path to all filtered bam files folder (forward and reverse bam files must be in the same directory)"
      show_help
 fi
@@ -97,13 +97,13 @@ mkdir -p "$directory"
 
 if [ "$bam_state" = "r" ]; then
     # Make Exon-less bam files
-    bash $script_dir/filterOutExonsBAM.sh $raw_bam_folder $exons_bed $directory $threads
+    bash "$script_dir/filterOutExonsBAM.sh" "$raw_bam_folder" "$exons_bed" "$directory" "$threads"
     wait $!
     
     filtered_bam_folder="$directory/filtered_bam"
     
     # Make Forward and Reverse bam files
-    bash $script_dir/launchFastSplit.sh $script_dir $directory $filtered_bam_folder $threads
+    bash "$script_dir/launchFastSplit.sh" "$script_dir" "$directory" "$filtered_bam_folder" "$threads"
     wait $!
 fi
 # Create the configuration table for the Python script
