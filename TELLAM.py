@@ -418,7 +418,7 @@ def computeMetric(row, sample_List, window, decrease_indicator, prefix):
         sample = sample_List[i]
         
         L.append(getCoverage(woi_5, sample['fwd'], sample['rev'], prefix=prefix))
-    print(L)
+    
     score5 = np.mean(np.array(L) + 1)
         
     L =[]
