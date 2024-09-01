@@ -135,6 +135,6 @@ echo "Launching the Python pipeline..."
 
 # Launch the Python script with the configuration file
 python=$(command -v python)
-$python "$script_dir/TELLAM.py" "$config_file"
+$python "$script_dir/TELLAM/TELLAM.py" "$config_file"
 
 echo "Pipeline completed."
