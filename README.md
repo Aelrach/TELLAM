@@ -43,9 +43,9 @@ bash run_TELLAM.sh -d <deseq2_table> -state <bam_state> -chr <chr_prefix> -name 
 - `-name`       Name to refer to the condition (e.g., `'AZA'`)
 - `-control`    Name to refer to the control (e.g., `'DMSO'`)
 - `-elements`   List of patterns found in the IDs of the annotation file used to filter rows of DESeq2 table (e.g., `'LTR'`)
-- `-raw`        IF AND ONLY IF `-state` is `'r'`; Path to the folder containing all raw BAM files
+- `-raw`        IF AND ONLY IF `-state` is `'r'`; Path to the folder containing all TREATED CONDITION ONLY raw BAM files
 - `-exons`      IF AND ONLY IF `-state` is `'r'`; Path to the BED file containing all exons of the genome. Verify that the chromosome naming of this file matches that of your BAM files
-- `-fb`         IF AND ONLY IF `-state` is `'f'`; Path to the folder containing all forward and reverse BAM files
+- `-fb`         IF AND ONLY IF `-state` is `'f'`; Path to the folder containing all TREATED CONDITION ONLY forward and reverse BAM files
   
 ### Optional arguments:
 - `-threads`    Number of threads to use if `-state` is set to `'r'` (default is 8)
