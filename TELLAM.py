@@ -763,6 +763,8 @@ def run_pipeline(config):
     deseq2_table = config.get('DESEQ2_TABLE')
     bam_state = config.get('BAM_STATE')
     chr_prefix = config.get('CHR_PREFIX')
+    if chr_prefix == 'None':
+        chr_prefix = None
     condition_name = config.get('CONDITION_NAME')
     control_name = config.get('CONTROL_NAME')
     element_pattern = config.get('ELEMENT_PATTERN').split(',')
