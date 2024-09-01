@@ -63,8 +63,8 @@ done
 # Default values if not set
 threads="${threads:-8}"
 directory="${directory:-$script_dir/${condition_name}vs${control_name}_TELLAM}"
-annotation="${annotation:-$script_dir/GRCh38_Ensembl_rmsk_TE.gtf.locInd.locations}"
-consensus="${consensus:-$script_dir/UCSC_TE_consensus.fa.txt}"
+annotation="${annotation:-$script_dir/TELLAM/GRCh38_Ensembl_rmsk_TE.gtf.locInd.locations}"
+consensus="${consensus:-$script_dir/TELLAM/UCSC_TE_consensus.fa.txt}"
 window="${window:-3000}"
 context="${context:-0.95}"
 size="${size:-0.1}"
