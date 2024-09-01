@@ -35,17 +35,6 @@ function show_help {
 }
 
 # Parse command-line arguments
-# Default values
-threads="${threads:-8}"
-directory="${directory:-$script_dir/${condition_name}vs${control_name}_TELLAM}"
-annotation="${annotation:-$script_dir/GRCh38_Ensembl_rmsk_TE.gtf.locInd.locations}"
-consensus="${consensus:-$script_dir/UCSC_TE_consensus.fa.txt}"
-window="${window:-3000}"
-context="${context:-0.95}"
-size="${size:-0.1}"
-coverage="${coverage:-0.06}"
-full="${full:-0.9}"
-
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -d) deseq2_table="$2"; shift ;;
@@ -70,6 +59,17 @@ while [[ "$#" -gt 0 ]]; do
     esac
     shift
 done
+
+# Default values if not set
+threads="${threads:-8}"
+directory="${directory:-$script_dir/${condition_name}vs${control_name}_TELLAM}"
+annotation="${annotation:-$script_dir/GRCh38_Ensembl_rmsk_TE.gtf.locInd.locations}"
+consensus="${consensus:-$script_dir/UCSC_TE_consensus.fa.txt}"
+window="${window:-3000}"
+context="${context:-0.95}"
+size="${size:-0.1}"
+coverage="${coverage:-0.06}"
+full="${full:-0.9}"
 
 # Check for required arguments
 if [ -z "$deseq2_table" ] || [ -z "$bam_state" ] || [ -z "$chr_prefix" ] || [ -z "$condition_name" ] || [ -z "$control_name" ] || [ -z "$element_pattern" ] || [ -z "$annotation" ]; then
