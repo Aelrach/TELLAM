@@ -5,7 +5,7 @@ script_dir=$(dirname "$(pwd "${BASH_SOURCE[0]}")")
 
 # Function to display the help message
 function show_help {
-    echo "Usage: $(basename $0) -d <deseq2_table> -state <bam_state> -chr <chr_prefix> -name <condition_name> -control <control_name> -elements <element_pattern> -annotation <annotation> [options]"
+    echo "Usage: $(basename $0) -d <deseq2_table> -state <bam_state> -chr <chr_prefix> -name <condition_name> -control <control_name> -elements <element_pattern> [options]"
     echo
     echo "Required arguments:"
     echo "  -d          Path to the DESeq2 table (e.g., results.csv)"
@@ -14,7 +14,6 @@ function show_help {
     echo "  -name       Name to refer to the condition (e.g., 'AZA')"
     echo "  -control    Name to refer to the control (e.g., 'DMSO')"
     echo "  -elements   List of patterns found in the IDs of the annotation file used to filter rows of deseq2 table (e.g., 'LTR')"
-    echo "  -annotation Path to the annotation file (default is 'TELLAM/annotation.gtf')"
     echo
     echo "Optional arguments:"
     echo "  -raw        Must be set if -state is 'r', Path to the folder containing all raw bam files"
@@ -22,7 +21,8 @@ function show_help {
     echo "  -threads    Number of threads to use if -state is set to 'r' (default is 8)"
     echo "  -fb         Must be set if -state is 'f', Path to the folder containing all forward and reverse bam files"
     echo "  -directory  Project directory to save files (default is \${name}_TELLAM)"
-    echo "  -consensus  Path to the consensus fasta file (default is 'TELLAM/consensus.fasta')"
+    echo "  -annotation Path to the annotation file (default is 'TELLAM/GRCh38_Ensembl_rmsk_TE.gtf.locInd.locations')"
+    echo "  -consensus  Path to the consensus fasta file (default is 'TELLAM/UCSC_TE_consensus.fa.txt')"
     echo "  -window     Window size in base pairs used to compute 3' and 5' context (default is 3000bp)"
     echo "  -context    [0,1], context ratio threshold below which exponential decrease of the context effect starts. (default is 0.95)"
     echo "  -size       [0,1], size ratio threshold below which exponential decrease of the size effect starts. (default is 0.1)"
@@ -30,7 +30,7 @@ function show_help {
     echo "  -full       [0,1], Proportion of consensus size above which the loci is considered full_length (default is 0.9)"
     echo
     echo "Example:"
-    echo "  $(basename $0) -d DESEQ.txt -state f -fb path_to_filtered_bam -chr chr -name AZA -control DMSO -elements 'L1:LINE',LTR -annotation path_to_TE_locus_annotation"
+    echo "  $(basename $0) -d DESEQ.txt -state f -fb path_to_filtered_bam -chr chr -name AZA -control DMSO -elements 'L1:LINE',LTR "
     exit 1
 }
 
@@ -77,17 +77,17 @@ if [ -z "$deseq2_table" ] || [ -z "$bam_state" ] || [ -z "$chr_prefix" ] || [ -z
     show_help
 fi
 
-if [ "$bam_state" -eq "r" ] && [ -z "$raw_bam_folder" ]; then
+if [ "$bam_state" = "r" ] && [ -z "$raw_bam_folder" ]; then
      echo "Error: -state is set to 'r' but -raw not defined. Pass to -raw argument the path to raw bam files folder"
      show_help
 fi
 
-if [ "$bam_state" -eq "r" ] && [ -z "$exons_bed" ]; then
+if [ "$bam_state" = "r" ] && [ -z "$exons_bed" ]; then
      echo "Error: -state is set to 'r' but -exons not defined. Pass to -exons argument the path to exons bed file"
      show_help
 fi
 
-if [ "$bam_state" -eq "f" ] && [ -z "$fwd_bam_folder" ]; then
+if [ "$bam_state" = "f" ] && [ -z "$fwd_bam_folder" ]; then
      echo "Error: -state is set to 'f' but -fb not defined. Pass to -fb argument the path to all filtered bam files folder (forward and reverse bam files must be in the same directory)"
      show_help
 fi
@@ -95,7 +95,7 @@ fi
 # Create the project directory if it doesn't exist
 mkdir -p "$directory"
 
-if [ "$bam_state" -eq "r" ]; then
+if [ "$bam_state" = "r" ]; then
     # Make Exon-less bam files
     bash $script_dir/filterOutExonsBAM.sh $raw_bam_folder $exons_bed $directory $threads
     wait $!
