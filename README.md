@@ -8,7 +8,7 @@ Pipeline for Transposable Elements Locus Level Analysis. Created to analyze resu
 - The following python libraries :
   - numpy
   - pandas
-  - pickle
+  - scikit-learn
   - biopython
   - pysam
 # Installation
