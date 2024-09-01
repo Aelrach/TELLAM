@@ -18,27 +18,30 @@ Usage::
 bash run_TELLAM.sh -d <deseq2_table> -state <bam_state> -chr <chr_prefix> -name <condition_name> -control <control_name> -elements <element_pattern> -annotation <annotation> [options]
 ```
 
-Required arguments:
-      -d          Path to the DESeq2 table (e.g., results.csv)
-      -state      State of bam files, 'r' for raw bam files or 'f' for strand separated AND exon-less filtered bam
-      -chr        Prefix used to identify chromosomes in bam files, 'chr' or 'None'
-      -name       Name to refer to the condition (e.g., 'AZA')
-      -control    Name to refer to the control (e.g., 'DMSO')
-      -elements   List of patterns found in the IDs of the annotation file used to filter rows of deseq2 table (e.g., 'LTR')
-      -annotation Path to the annotation file (default is 'TELLAM/annotation.gtf')
-Optional arguments:
-      -raw        Must be set if -state is 'r', Path to the folder containing all raw bam files
-      -exons      Must be set if -state is 'r', Path to the bed file containing all exons of genome. VERIFY that chromosome naming of this file and that of your bam files match
-      -threads    Number of threads to use if -state is set to 'r' (default is 8)
-      -fb         Must be set if -state is 'f', Path to the folder containing all forward and reverse bam files
-      -directory  Project directory to save files (default is \${name}_TELLAM)
-      -consensus  Path to the consensus fasta file (default is 'TELLAM/consensus.fasta')
-*Analysis optional parameters*
-      -window     Window size in base pairs used to compute 3' and 5' context (default is 3000bp)
-      -context    between (0,1), context ratio threshold below which exponential decrease of the context effect starts. (default is 0.95)
-      -size       between (0,1), size ratio threshold below which exponential decrease of the size effect starts. (default is 0.1)
-      -coverage   between (0,1), Should be very low values, Reads per base coverage threshold below which exponential decrease of the coverage effect starts. (default is 0.06)
-      -full       between (0,1), Proportion of consensus size above which the loci is considered full_length (default is 0.9)
+### Required arguments:
+- `-d`          Path to the DESeq2 table (e.g., `results.csv`)
+- `-state`      State of BAM files: `'r'` for raw BAM files or `'f'` for strand-separated AND exon-less filtered BAM files
+- `-chr`        Prefix used to identify chromosomes in BAM files: `'chr'` or `'None'`
+- `-name`       Name to refer to the condition (e.g., `'AZA'`)
+- `-control`    Name to refer to the control (e.g., `'DMSO'`)
+- `-elements`   List of patterns found in the IDs of the annotation file used to filter rows of DESeq2 table (e.g., `'LTR'`)
+- `-annotation` Path to the annotation file (default is `'TELLAM/annotation.gtf'`)
+
+### Optional arguments:
+- `-raw`        Must be set if `-state` is `'r'`; Path to the folder containing all raw BAM files
+- `-exons`      Must be set if `-state` is `'r'`; Path to the BED file containing all exons of the genome. Verify that the chromosome naming of this file matches that of your BAM files
+- `-threads`    Number of threads to use if `-state` is set to `'r'` (default is 8)
+- `-fb`         Must be set if `-state` is `'f'`; Path to the folder containing all forward and reverse BAM files
+- `-directory`  Project directory to save files (default is `${name}_TELLAM`)
+- `-consensus`  Path to the consensus FASTA file (default is `'TELLAM/consensus.fasta'`)
+
+### Analysis optional parameters:
+- `-window`     Window size in base pairs used to compute 3' and 5' context (default is 3000 bp)
+- `-context`    Between (0,1), context ratio threshold below which exponential decrease of the context effect starts (default is 0.95)
+- `-size`       Between (0,1), size ratio threshold below which exponential decrease of the size effect starts (default is 0.1)
+- `-coverage`   Between (0,1); should be very low values; reads per base coverage threshold below which exponential decrease of the coverage effect starts (default is 0.06)
+- `-full`       Between (0,1), proportion of consensus size above which the locus is considered full_length (default is 0.9)
+
 Example:
 ```bash
       bash run_TELLAM.sh -d DESEQ.txt -state f -fb path_to_filtered_bam -chr chr -name AZA -control DMSO -elements 'L1:LINE',LTR -annotation path_to_TE_locus_annotation"
