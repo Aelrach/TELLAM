@@ -479,7 +479,7 @@ def makeGenomicContextTable(loci_table, sample_List, window, prefix, decrease_3v
     pd.DataFrame
         DataFrame containing computed genomic context scores.
     """
-    MetricVector = pd.DataFrame(loci_table.swifter.swifter.apply(computeMetric, axis=1, 
+    MetricVector = pd.DataFrame(loci_table.swifter.apply(computeMetric, axis=1, 
                                       sample_List=sample_List,
                                       window=window,
                                       prefix=prefix,
