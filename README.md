@@ -1,5 +1,5 @@
 # TELLAM (Transposable Elements Locus Level Analysis Metric)
-Pipeline for Transposable Elements Locus Level Analysis. Created to analyze results derived from RNAseq experiments. It uses DESeQ2 tables, exon-les and strand separated bam files to compute a metric, TELLAM, on each annotated loci given in input. It then determines which are activated or not using a small Random Forest Classifier.
+Pipeline for Transposable Elements Locus Level Analysis. Created to analyze results derived from RNAseq experiments. It uses DESeQ2 tables, exon-less and strand separated bam files to compute a metric, TELLAM, on each annotated loci given in input. It then determines which are activated or not using a small Random Forest Classifier.
 
 # Requirements
 - bedtools
