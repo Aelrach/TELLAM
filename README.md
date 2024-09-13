@@ -49,7 +49,7 @@ bash run_TELLAM.sh -d <deseq2_table> -state <bam_state> -chr <chr_prefix> -name 
 - `-fb`         IF AND ONLY IF `-state` is `'f'`; Path to the folder containing all TREATED CONDITION ONLY forward and reverse BAM files
   
 ### Optional arguments:
-- `-threads`    Number of threads to use (default is 8)
+- `-threads`    Number of threads to use if `-state` is set to `'r'` (default is 8)
 - `-directory`  Project directory to save files (default is `${name}_TELLAM`)
 - `-consensus`  Path to the consensus FASTA file (default is `'TELLAM/consensus.fasta'`)
 
@@ -75,7 +75,3 @@ The pipeline will produce a processed version of your DESeQ2 table as an interme
 "#chr", "start", "end", "TE", "family", "position", "strand", "score", "3v5_effect", "MeanCoverage", "size_ratio", "full_length", "size_effect", "Metric", "Activated"
 
 This table contains all informations needed to analyze the activation of your loci, providing positions, names and TELLAM features for each loci in bed format. A subset of this table containing only activated loci will be produced. All files are saved in either the directory specified by -directory or in an automatically generated folder in the TELLAM folder.
-
-
-
-
