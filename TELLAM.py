@@ -11,11 +11,28 @@ import pandas as pd
 import numpy as np
 import pickle as pkl
 from Bio import SeqIO
-import pysam
 import swifter
+import pysam
 import time
 import re
 import os
+import platform
+
+def get_os_type():
+    system = platform.system()
+    if system == "Linux":
+        # Further check for WSL if needed
+        if 'microsoft' in platform.uname().release.lower():
+            return "WSL"
+        return "Linux"
+    elif system == "Darwin":
+        return "macOS"
+    elif system == "Windows":
+        return "Windows"
+    else:
+        return "Unknown"
+
+current_os = get_os_type()
 
 def load_config(config_file):
     """
@@ -399,6 +416,8 @@ def computeMetric(row, sample_List, window, decrease_indicator, prefix):
     end = row["end"]
     strand = row["strand"]
     locus = (chr_n, start, end, strand)
+    
+    N_samples = len(sample_List)
             
     if strand == '+':
         # Get upstream region (compared to TE orientation)
@@ -414,7 +433,7 @@ def computeMetric(row, sample_List, window, decrease_indicator, prefix):
         woi_3 = (chr_n,max(start - window,0),start,strand)
     
     L =[]
-    for i in range(len(sample_List)):
+    for i in range(N_samples):
         # Get coverage in each sample
         sample = sample_List[i]
         
@@ -423,7 +442,7 @@ def computeMetric(row, sample_List, window, decrease_indicator, prefix):
     score5 = np.mean(np.array(L) + 1)
         
     L =[]
-    for i in range(len(sample_List)):
+    for i in range(N_samples):
         # Get coverage in each sample
         sample = sample_List[i]
         L.append(getCoverage(woi_3, sample['fwd'], sample['rev'], prefix=prefix))
@@ -431,7 +450,7 @@ def computeMetric(row, sample_List, window, decrease_indicator, prefix):
     score3 = np.mean(np.array(L) + 1)
     
     L =[]
-    for i in range(len(sample_List)):
+    for i in range(N_samples):
         # Get coverage in each sample
         sample = sample_List[i]
         L.append(getCoverage(locus, sample['fwd'], sample['rev'], prefix=prefix))
@@ -442,6 +461,13 @@ def computeMetric(row, sample_List, window, decrease_indicator, prefix):
     effect = np.power(ratio, 1 + coeff*ratio) if ratio <= 1 else np.tanh(ratio) + 1 - np.tanh(decrease_indicator)
     return (score5, score3, effect, coverage)
     
+from concurrent.futures import ThreadPoolExecutor
+
+# Parallelizing the row-wise computation with multithreading
+def parallel_computeMetrics_thread(df, sample_List, window, decrease_indicator, prefix, num_workers=8):
+    with ThreadPoolExecutor(max_workers=num_workers) as executor:
+        results = list(executor.map(lambda row: computeMetric(row, sample_List, window, decrease_indicator, prefix), [row for _, row in df.iterrows()]))
+    return results
 
 def getTupleInfo(row, INDEX = 0):
     """
@@ -458,6 +484,41 @@ def getTupleInfo(row, INDEX = 0):
         The value of the specified tuple element.
     """
     return row[0][INDEX]
+
+def parallel_getTupleInfo(df, INDEX, num_workers=8):
+    with ThreadPoolExecutor(max_workers=num_workers) as executor:
+        results = list(executor.map(lambda row: getTupleInfo(row, INDEX), [row for _,row in df.iterrows()]))
+    return results
+
+def opti_makeGenomicContextTable(loci_table, sample_List, window, prefix, decrease_3v5, threads):
+    """
+    Generates a table containing genomic context scores for a list of loci.
+
+    Parameters:
+    loci_table: pd.DataFrame
+        DataFrame containing loci information.
+    sample_List: list
+        List of sample dictionaries containing forward and reverse BAM files.
+    window: int
+        Window size used to compute metrics.
+    prefix: str
+        Prefix modification for chromosome names.
+    decrease_3v5: float
+        Threshold for adjusting the 3' vs 5' effect ratio.
+
+    Returns:
+    pd.DataFrame
+        DataFrame containing computed genomic context scores.
+    """
+    MetricVector = pd.DataFrame(parallel_computeMetrics_thread(loci_table, sample_List, window, decrease_indicator, prefix, num_workers=threads))
+    
+    scores5 = parallel_getTupleInfo(MetricVector, INDEX=0, num_workers=threads)
+    scores3 = parallel_getTupleInfo(MetricVector, INDEX=1, num_workers=threads)
+    ratio = parallel_getTupleInfo(MetricVector, INDEX=2, num_workers=threads)
+    coverage = parallel_getTupleInfo(MetricVector, INDEX=3, num_workers=threads)
+    
+    dico = {"5prime":scores5, "3prime":scores3, "3v5_effect":ratio, "MeanCoverage":coverage}
+    return pd.DataFrame(data=dico)
 
 def makeGenomicContextTable(loci_table, sample_List, window, prefix, decrease_3v5):
     """
@@ -507,7 +568,12 @@ def getConsensusSize(row):
         The length of the consensus sequence.
     """
     return len(row["reverse"])
-    
+
+def parallel_getConsensusSize(df, num_workers=8):
+    with ThreadPoolExecutor(max_workers=num_workers) as executor:
+        results = list(executor.map(lambda row: getConsensusSize(row), [row for _,row in df.iterrows()]))
+    return results
+
 def read_fasta_to_df(file_path):
     """
     Reads a FASTA file and creates a DataFrame with element names, consensus sequences, and sequence lengths.
@@ -558,7 +624,12 @@ def IsFull(row, ref=None, coeff=0.9):
     except:
         print(f"\nNo consensus found for {row['family']}")
         return np.nan
-    
+
+def parallel_IsFull(df, ref, coeff, num_workers=8):
+    with ThreadPoolExecutor(max_workers=num_workers) as executor:
+        results = list(executor.map(lambda row: IsFull(row, ref, coeff), [row for _,row in df.iterrows()]))
+    return results
+
 def getSizeRatio(row, ref=None):
     """
     Calculates the size ratio of a locus relative to its consensus sequence.
@@ -578,6 +649,11 @@ def getSizeRatio(row, ref=None):
     except:
         print(f"\nNo consensus found for {row['family']}")
         return np.nan
+
+def parallel_getSizeRatio(df, ref, num_workers=8):
+    with ThreadPoolExecutor(max_workers=num_workers) as executor:
+        results = list(executor.map(lambda row: getSizeRatio(row, ref), [row for _,row in df.iterrows()]))
+    return results
 
 def vec_LeakyReLU(array, slope):
     """
@@ -656,6 +732,93 @@ def PredictActivation(Table, path_to_model):
     activation = model.predict(df[features])
     
     return activation
+
+def opti_make_Table(deseq, sample_dico, window, prefix, decrease_3v5, consensus_dico, size_threshold, coverage_threshold, full_length_threshold, path_to_model, threads):
+    """
+    Constructs the final table by computing genomic context scores, size metrics, and predicting activation.
+
+    Parameters:
+    deseq: pd.DataFrame
+        DataFrame containing the DESeq2 output with TE loci information.
+    sample_dico: list of dict
+        List containing dictionaries with BAM file information for each sample.
+    window: int
+        Window size for 5' and 3' coverage calculations.
+    prefix: str
+        Chromosome prefix or modification for BAM file chromosome names.
+    decrease_3v5: float
+        Threshold for the decrease in 3' vs 5' metric.
+    consensus_dico: dict
+        Dictionary mapping TE family names to their consensus sequence length.
+    size_threshold: float
+        Threshold for size ratio transformation.
+    coverage_threshold: float
+        Threshold for coverage transformation.
+    full_length_threshold: float
+        Threshold for defining a locus as full-length.
+    path_to_model: str
+        Path to the pre-trained activation prediction model.
+
+    Returns:
+    tuple:
+        (Table, summary_dict) where `Table` is the final DataFrame and `summary_dict` contains summary statistics.
+    """
+    Table = deseq
+        
+    t0 = time.time()
+    print("\nStarted computing genomic context scores..")
+    debut = time.time()
+    context = opti_makeGenomicContextTable(Table, sample_dico, window=window, prefix=prefix, decrease_3v5=decrease_3v5, threads=threads)
+    
+    Table["3v5_effect"] = context["3v5_effect"]
+    
+    Table["MeanCoverage"] = context["MeanCoverage"] 
+    Table["Coverage_effect"] = vec_transformCoverage(Table["MeanCoverage"], coverage_threshold)
+    print(f"Finished. Computation time is {time.time()-debut} seconds.\n")
+    
+    
+    
+    print("Processing length informations of loci..")
+    debut = time.time()
+    Table["size_ratio"] = parallel_getSizeRatio(Table, ref=consensus_dico, threads=threads)
+    Table["full_length"] = parallel_IsFull(Table, ref=consensus_dico, coeff=full_length_threshold, threads=threads)
+    Table["size_effect"] = vec_transformSize(Table["size_ratio"], size_threshold)
+    print(f"Finished. Computation time is {time.time()-debut} seconds.\n")
+    
+    print("Computing Metric and identifying activated loci..")
+    debut = time.time()
+    Table["Metric"] = Table["score"]*Table["3v5_effect"]*Table["Coverage_effect"]*Table["size_effect"]
+    
+    noNA_table = Table[~pd.isna(Table["Metric"])]
+    NA_table = Table[pd.isna(Table["Metric"])]
+    
+    active = PredictActivation(noNA_table, path_to_model)
+    
+    noNA_table["Activated"] = active
+    
+    NA_table["Activated"] = [np.nan for i in range(Table[pd.isna(Table["Metric"])].shape[0])]
+    Table = pd.concat([noNA_table, NA_table], ignore_index=True)
+    
+    UP_mask = (Table["regulation"] == "UP") & (~pd.isna(Table["Metric"]))
+    
+    print(f"Finished. Computation time is {time.time()-debut} seconds.\n")
+    print(f"Table ready. Total computation time was {time.time()-t0} seconds. Happy analysis :D\n")
+    DN_mask = (Table["regulation"] == "DN") & (~pd.isna(Table["Metric"]))
+    summary_dict = {"window":window,
+                    "decrease_3v5":decrease_3v5,
+                    "size_threshold":size_threshold,
+                    "coverage_threshold":coverage_threshold,
+                    "full_length_threshold":full_length_threshold,
+                    "dataset_size":Table.shape[0],
+                    "mean_metric_UP":np.mean(Table[UP_mask]["Metric"]),
+                    "std_metric_UP":np.std(Table[UP_mask]["Metric"]),
+                    "mean_metric_DN":np.mean(Table[DN_mask]["Metric"]),
+                    "std_metric_DN":np.std(Table[DN_mask]["Metric"]),
+                    "max_coverage_full_length_UP":np.max(Table[UP_mask]["MeanCoverage"]),
+                    "max_metric":np.max(Table[UP_mask]["Metric"]),
+                    "UP_proportion":Table[UP_mask].shape[0]/Table.shape[0],
+                    "DN_proportion":Table[DN_mask].shape[0]/Table.shape[0]}
+    return Table, summary_dict
 
 def makeTable(deseq, sample_dico, window, prefix, decrease_3v5, consensus_dico, size_threshold, coverage_threshold, full_length_threshold, path_to_model):
     """
@@ -779,6 +942,7 @@ def run_pipeline(config):
     size = float(config.get("SIZE"))
     coverage = float(config.get('COVERAGE'))
     full = float(config.get('FULL'))
+    threads = int(config.get('THREADS'))
     
     print(f"\nRunning pipeline for {condition_name} vs {control_name}...")
     
@@ -802,13 +966,23 @@ def run_pipeline(config):
     
     print("\nComputing TELLAM...")
     # Making table
-    Table, summary_dict = makeTable(niceDESEQ, sample_List, window, chr_prefix,
-                            context,
-                            consensus_dico, 
-                            size, # High decrease in size effect below 10% of consensus size
-                            coverage, # High decrease in coverage effect below 0.06 reads per base
-                            full, 
-                            f"{tellam_dir}/ActivationModel.pkl") # proportion of consensus length above which loci are considered full_length
+    if current_os != 'Windows':
+        Table, summary_dict = opti_makeTable(niceDESEQ, sample_List, window, chr_prefix,
+                                context,
+                                consensus_dico, 
+                                size, # High decrease in size effect below 10% of consensus size
+                                coverage, # High decrease in coverage effect below 0.06 reads per base
+                                full, 
+                                f"{tellam_dir}/ActivationModel.pkl", # proportion of consensus length above which loci are considered full_length
+                                threads)
+    else:
+        Table, summary_dict = makeTable(niceDESEQ, sample_List, window, chr_prefix,
+                                context,
+                                consensus_dico, 
+                                size, # High decrease in size effect below 10% of consensus size
+                                coverage, # High decrease in coverage effect below 0.06 reads per base
+                                full, 
+                                f"{tellam_dir}/ActivationModel.pkl") # proportion of consensus length above which loci are considered full_length
     print("\nTELLAM computed...")
     # Formating and Saving tables of interest
     Table.rename(columns={'chr': '#chr'}, inplace=True)
@@ -826,12 +1000,12 @@ def run_pipeline(config):
     print("\nTable saved. TELLAM Pipeline completed.")
 
 if __name__ == "__main__":
-    # Load the configuration file path from command-line arguments
-    import sys
-    if len(sys.argv) != 2:
-        print("Usage: python3 your_pipeline_script.py <config_file>")
+    #Load the configuration file path from command-line arguments
+     import sys
+     if len(sys.argv) != 2:
+         print("Usage: python3 your_pipeline_script.py <config_file>")
         exit(1)
     
-    config_file = sys.argv[1]
-    config = load_config(config_file)
-    run_pipeline(config)
+     config_file = sys.argv[1]
+     config = load_config(config_file)
+     run_pipeline(config)

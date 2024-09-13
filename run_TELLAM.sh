@@ -18,7 +18,7 @@ function show_help {
     echo "Optional arguments:"
     echo "  -raw        Must be set if -state is 'r', Path to the folder containing all TREATED CONDITION ONLY raw bam files"
     echo "  -exons      Must be set if -state is 'r', Path to the bed file containing all exons of genome. VERIFY that chromosome naming of this file and that of your bam files match"
-    echo "  -threads    Number of threads to use if -state is set to 'r' (default is 8)"
+    echo "  -threads    Number of threads to use (default is 8)"
     echo "  -fb         Must be set if -state is 'f', Path to the folder containing all TREATED CONDITION ONLY forward and reverse bam files"
     echo "  -directory  Project directory to save files (default is \${name}_TELLAM)"
     echo "  -annotation Path to the annotation file (default is 'TELLAM/GRCh38_Ensembl_rmsk_TE.gtf.locInd.locations')"
