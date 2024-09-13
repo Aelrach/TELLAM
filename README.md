@@ -49,7 +49,7 @@ bash run_TELLAM.sh -d <deseq2_table> -state <bam_state> -chr <chr_prefix> -name 
 - `-fb`         IF AND ONLY IF `-state` is `'f'`; Path to the folder containing all TREATED CONDITION ONLY forward and reverse BAM files
   
 ### Optional arguments:
-- `-threads`    Number of threads to use if `-state` is set to `'r'` (default is 8)
+- `-threads`    Number of threads to use (default is 8)
 - `-directory`  Project directory to save files (default is `${name}_TELLAM`)
 - `-consensus`  Path to the consensus FASTA file (default is `'TELLAM/consensus.fasta'`)
 
