@@ -4,14 +4,14 @@ Pipeline for Transposable Elements Locus Level Analysis. Created to analyze resu
 # Requirements
 - bedtools
 - samtools
-- python 3.10
-- The following python libraries :
-  - numpy
-  - pandas
-  - swifter
-  - scikit-learn
-  - biopython
-  - pysam
+- python 3.10.14 tested
+  - biopython 1.81 tested
+  - numpy 1.25.0 tested
+  - pandas 2.0.3 tested
+  - pysam 0.22.0 tested
+  - swifter 1.3.4 tested
+  - scikit-learn 1.5.0 tested
+ 
 # Installation
 
 ### 1. Clone the Repository
@@ -49,7 +49,7 @@ bash run_TELLAM.sh -d <deseq2_table> -state <bam_state> -chr <chr_prefix> -name 
 - `-fb`         IF AND ONLY IF `-state` is `'f'`; Path to the folder containing all TREATED CONDITION ONLY forward and reverse BAM files
   
 ### Optional arguments:
-- `-threads`    Number of threads to use if `-state` is set to `'r'` (default is 8)
+- `-threads`    Number of threads to use (default is 8)
 - `-directory`  Project directory to save files (default is `${name}_TELLAM`)
 - `-consensus`  Path to the consensus FASTA file (default is `'TELLAM/consensus.fasta'`)
 
@@ -64,10 +64,12 @@ Example:
 ```bash
       bash run_TELLAM.sh -d DESEQ_AZAvsDMSO.txt -state f -fb path_to_AZA_filtered_bam -chr chr -name AZA -control DMSO -elements 'L1:LINE',LTR "
 ```
-In this command the user is specifying that exon-less, strand separated bam files (both forward and reverse in the same folder) for the TREATED CONDITION, are located in path_to_AZA_filtered_bam. 
-Specifies that the bam files were generated using chr1, chr2 etc.. chromosome naming and to only analyze loci which are L1:LINE or LTR. 
 
-Beware that the rows of your deseq table MUST have as ID the name of the loci. To this end, we recommand users to use the loci annotation file provided by TElocal (https://www.mghlab.org/software/telocal) when making their DESEQ2 tables. If you have a specially curated set of loci, make sure that every locus' ID is giving the Type, sub-Type and Family.
+In this command the user is specifying that exon-less, strand separated bam files (both forward and reverse in the same folder) for the TREATED CONDITION, are located in path_to_filtered_bam. 
+Specifies that the bam files were generated using chr1, chr2 etc.. chromosome naming and to only analyze loci which are L1:LINE or LTR.  
+
+Beware that the rows of your deseq table MUST have as ID the name of the loci. To this end, we recommend users to use the loci annotation file provided by TElocal (https://www.mghlab.org/software/telocal) when making their DESEQ2 tables. If you have a specially curated set of loci, make sure that every locus' ID follows the convention : "family"_dup"copy_name or number":"family":"Type":"Class"  
+e.g AluJo_dup71176:AluJo:Alu:SINE
 
 # Output
 The pipeline will produce a processed version of your DESeQ2 table as an intermediary file but the main output is a Table in bed format containing the following columns : 
