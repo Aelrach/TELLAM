@@ -1,5 +1,5 @@
 # TELLAM (Transposable Elements Locus Level Analysis Metric)
-Pipeline for Transposable Elements Locus Level Analysis. Created to analyze results derived from RNAseq experiments. It uses DESeQ2 tables, exon-les and strand separated bam files to compute a metric, TELLAM, on each annotated loci given in input. It then determines which are activated or not using a small Random Forest Classifier.
+Pipeline for Transposable Elements Locus Level Analysis. Created to analyze results derived from RNAseq experiments. It uses DESeQ2 tables, exon-less and strand separated bam files to compute a metric, TELLAM, on each annotated loci given in input. It then determines which are activated or not using a small Random Forest Classifier.
 
 # Requirements
 - bedtools
@@ -11,6 +11,7 @@ Pipeline for Transposable Elements Locus Level Analysis. Created to analyze resu
   - pysam 0.22.0 tested
   - swifter 1.3.4 tested
   - scikit-learn 1.5.0 tested
+ 
 # Installation
 
 ### 1. Clone the Repository
@@ -61,8 +62,9 @@ bash run_TELLAM.sh -d <deseq2_table> -state <bam_state> -chr <chr_prefix> -name 
 
 Example:
 ```bash
-      bash run_TELLAM.sh -d DESEQ.txt -state f -fb path_to_filtered_bam -chr chr -name AZA -control DMSO -elements 'L1:LINE',LTR "
+      bash run_TELLAM.sh -d DESEQ_AZAvsDMSO.txt -state f -fb path_to_AZA_filtered_bam -chr chr -name AZA -control DMSO -elements 'L1:LINE',LTR "
 ```
+
 In this command the user is specifying that exon-less, strand separated bam files (both forward and reverse in the same folder) for the TREATED CONDITION, are located in path_to_filtered_bam. 
 Specifies that the bam files were generated using chr1, chr2 etc.. chromosome naming and to only analyze loci which are L1:LINE or LTR.  
 
@@ -75,7 +77,3 @@ The pipeline will produce a processed version of your DESeQ2 table as an interme
 "#chr", "start", "end", "TE", "family", "position", "strand", "score", "3v5_effect", "MeanCoverage", "size_ratio", "full_length", "size_effect", "Metric", "Activated"
 
 This table contains all informations needed to analyze the activation of your loci, providing positions, names and TELLAM features for each loci in bed format. A subset of this table containing only activated loci will be produced. All files are saved in either the directory specified by -directory or in an automatically generated folder in the TELLAM folder.
-
-
-
-
