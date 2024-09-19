@@ -79,7 +79,7 @@ Note that to specify several patterns you must give each pattern in a comma sepa
 
 Beware that the rows of your deseq table MUST have as ID the name of the loci. To this end, we recommend users to use the loci annotation file provided by TElocal (https://www.mghlab.org/software/telocal) when making their DESEQ2 tables. If you have a specially curated set of loci, make sure that every locus' ID follows the convention : 
 
-_"family"__dup_"copy_name or number"_:_"family"_:_"Type"_:_"Class"_  
+[family]_dup[copy_name or number]:[family]:[Type]:[Class]
 
 ### /!\ The use of _dup is required to identify insertions /!\
 
