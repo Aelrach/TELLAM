@@ -74,16 +74,17 @@ Example:
 In this command the user is specifying that exon-less, strand separated bam files (both forward and reverse in the same folder) for the **TREATED CONDITION**, are **all** located in path_to_filtered_bam. 
 The command also specifies that the bam files were generated using chr1, chr2 etc.. chromosome naming and to only analyze loci which are L1:LINE or LTR.  
 
+# Notes
 Note that to specify several patterns you must give each pattern in a comma separated format (No spaces allowed between patterns). 
 **e.g VALID : L1:LINE,LTR,AluJo / NOT VALID : L1:LINE, LTR, AluJo**
 
-Beware that the rows of your deseq table MUST have as ID the name of the loci. To this end, we recommend users to use the loci annotation file provided by TElocal (https://www.mghlab.org/software/telocal) when making their DESEQ2 tables. If you have a specially curated set of loci, make sure that every locus' ID follows the convention : 
+Beware that the rows of your deseq table MUST have as ID the name of the loci. To this end, we recommend users to use the loci annotation file provided by TElocal (https://www.mghlab.org/software/telocal) when making their DESEQ2 tables. 
+If you have a specially curated set of loci, make sure that every locus' ID follows the convention : 
 
-[family]_dup[copy_name or number]:[family]:[Type]:[Class]
+<family>_dup<CopyName or Number>:<family>:<Type>:<Class>
+**e.g AluJo_dup71176:AluJo:Alu:SINE**
 
 ### /!\ The use of _dup is required to identify insertions /!\
-
-**e.g AluJo_dup71176:AluJo:Alu:SINE**
 
 # Using TELLAM with raw BAM files (-state set to 'r')
 If you plan to use TELLAM with raw BAM files, you **MUST** specify a **BED file containing all exons** of your genome of interest in the **-elements argument**. Before running the actual TELLAM pipeline, the script will produce exon-less, strand separated bam files. This will take significantely more time to run.
