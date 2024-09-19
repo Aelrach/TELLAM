@@ -81,4 +81,4 @@ The pipeline will produce a processed version of your DESeQ2 table as an interme
 
 "#chr", "start", "end", "TE", "family", "position", "strand", "score", "3v5_effect", "MeanCoverage", "size_ratio", "full_length", "size_effect", "Metric", "Activated"
 
-This table contains all informations needed to analyze the activation of your loci, providing positions, names and TELLAM features for each loci in bed format. A subset of this table containing only activated loci will be produced. All files are saved in either the directory specified by -directory or in an automatically generated folder in the TELLAM folder.
+This table contains all informations needed to analyze the activation of your loci, providing positions, names and TELLAM features for each loci in bed format. A subset of this table containing only loci considered as reactivated by TELLAM will be produced. All files are saved in either the directory specified by  -directory or in an automatically generated folder in the TELLAM folder.
