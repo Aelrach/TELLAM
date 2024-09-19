@@ -39,7 +39,7 @@ Before using TELLAM, make sure you have these 2 things : a **locus-level annotat
 # Usage
 Usage: 
 ```bash
-bash run_TELLAM.sh -d <deseq2_table> -state <bam_state> -chr <chr_prefix> -name <condition_name> -control <control_name> -elements <element_pattern> [options]
+bash run_TELLAM.sh -d <deseq2_table> -state <bam_state> -chr <chr_prefix> -name <condition_name> -control <control_name> -annotation path_to_annotations -elements <element_pattern> [options]
 ```
 
 ### Required arguments:
@@ -48,12 +48,13 @@ bash run_TELLAM.sh -d <deseq2_table> -state <bam_state> -chr <chr_prefix> -name 
 - `-chr`        Prefix used to identify chromosomes in BAM files: `'chr'` or `'None'`
 - `-name`       Name to refer to the condition (e.g., `'AZA'`)
 - `-control`    Name to refer to the control (e.g., `'DMSO'`)
-- `-elements`   List of patterns found in the IDs of the annotation file used to filter rows of DESeq2 table (e.g., `'LTR'`)
+- `-annotation` Path to the annotation file
 - `-raw`        IF AND ONLY IF `-state` is `'r'`; Path to the folder containing all TREATED CONDITION ONLY raw BAM files
 - `-exons`      IF AND ONLY IF `-state` is `'r'`; Path to the BED file containing all exons of the genome. Verify that the chromosome naming of this file matches that of your BAM files
 - `-fb`         IF AND ONLY IF `-state` is `'f'`; Path to the folder containing all TREATED CONDITION ONLY forward and reverse BAM files
   
 ### Optional arguments:
+- `-elements`   List of patterns found in the IDs of the annotation file used to filter rows of DESeq2 table (e.g., `'LTR'`) /!\ If this is not set, will analyze ALL loci !!
 - `-threads`    Number of threads to use (default is 8)
 - `-directory`  Project directory to save files (default is `${name}_TELLAM`)
 - `-consensus`  Path to the consensus FASTA file (default is `'TELLAM/consensus.fasta'`)
@@ -67,7 +68,7 @@ bash run_TELLAM.sh -d <deseq2_table> -state <bam_state> -chr <chr_prefix> -name 
 
 Example:
 ```bash
-      bash run_TELLAM.sh -d DESEQ_AZAvsDMSO.txt -state f -fb path_to_AZA_filtered_bam -chr chr -name AZA -control DMSO -elements 'L1:LINE',LTR
+      bash run_TELLAM.sh -d DESEQ.txt -state f -fb path_to_filtered_bam -chr chr -name AZA -control DMSO -annotation path_to_annotations -elements 'L1:LINE',LTR
 ```
 
 In this command the user is specifying that exon-less, strand separated bam files (both forward and reverse in the same folder) for the **TREATED CONDITION**, are **all** located in path_to_filtered_bam. 
@@ -79,6 +80,8 @@ Note that to specify several patterns you must give each pattern in a comma sepa
 Beware that the rows of your deseq table MUST have as ID the name of the loci. To this end, we recommend users to use the loci annotation file provided by TElocal (https://www.mghlab.org/software/telocal) when making their DESEQ2 tables. If you have a specially curated set of loci, make sure that every locus' ID follows the convention : 
 
 "family"_dup"copy_name or number":"family":"Type":"Class"  
+
+### /!\ The use of _dup is required to identify insertions /!\
 
 **e.g AluJo_dup71176:AluJo:Alu:SINE**
 
