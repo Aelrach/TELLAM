@@ -82,8 +82,7 @@ Beware that the rows of your deseq table MUST have as ID the name of the loci. T
 
 **e.g AluJo_dup71176:AluJo:Alu:SINE**
 
-# Note on using TELLAM with unfiltered BAM files 
-## (argument -state set to 'r')
+# Note on using TELLAM with unfiltered BAM files (-state set to 'r')
 If you plan to use TELLAM with raw BAM files, you **MUST** specify a **BED file containing all exons** of your genome of interest in the **-elements argument**. Before running the actual TELLAM pipeline, the script will produce exon-less, strand separated bam files. This will take significantely more time to run.
 
 # Output
