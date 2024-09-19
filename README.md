@@ -37,7 +37,7 @@ Before using TELLAM, make sure you have these 2 things : a **locus-level annotat
 - The **FASTA file with consensus sequences is provided within TELLAM**. It was downloaded from UCSC's Database (https://hgwdev.gi.ucsc.edu/~max/kznf/hg38reps/hg38/seqs/). **You can provide your own.**
 
 ### 4. DESeQ2 table format
-Your deseq2 table should be a tab ('\t') delimited file and have the same column format as the file exemple_DESEQ2.txt
+Your deseq2 table should be a tab ('\t') delimited file and have the same column format as the file exemple_DESEQ2.txt provided in TELLAM's folder.
 # Usage
 Usage: 
 ```bash
