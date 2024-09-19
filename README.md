@@ -34,7 +34,7 @@ Nice step-by-step tutorial on how to get miniconda up and running from the comma
 ### 3. Verify that you have these auxilliary files
 Before using TELLAM, make sure you have these 2 things : a **locus-level annotation file** of transposable elements insertions in the genome of interest and a **FASTA file** containing **consensus sequences** for each element you wish to analyze.
 - If you are analyzing human or mouse samples, we recommend that you download the locus-level annotation file provided by the **TElocal team at (https://www.mghlab.org/software/telocal)**
-- The **FASTA file with consensus sequences is provided within TELLAM**. It was downloaded from UCSC's Database. **You can provide your own.**
+- The **FASTA file with consensus sequences is provided within TELLAM**. It was downloaded from UCSC's Database (https://hgwdev.gi.ucsc.edu/~max/kznf/hg38reps/hg38/seqs/). **You can provide your own.**
 
 # Usage
 Usage: 
