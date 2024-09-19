@@ -54,6 +54,7 @@ while [[ "$#" -gt 0 ]]; do
         -context) context="$2"; shift ;;
         -size) size="$2"; shift ;;
         -coverage) coverage="$2"; shift ;;
+        -full) full="$2"; shift ;;
         -h|--help) show_help ;;
         *) echo "Unknown parameter passed: $1"; show_help ;;
     esac
