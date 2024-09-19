@@ -243,7 +243,7 @@ def makeNiceDESEQ(deseq2_table, annotation, element_pattern, directory, conditio
     data = pd.read_table(deseq2_table, sep='\t')
     
     data["ID"] = np.array(data.index)
-    if element_pattern != 'NoneProvided':
+    if element_pattern[0] != 'NoneProvided':
         pattern = '|'.join(element_pattern)
         
         #Keep only specified elements
@@ -314,7 +314,7 @@ def makeNiceDESEQ(deseq2_table, annotation, element_pattern, directory, conditio
     score = new_data['RankMetric']
 
     niceDESEQ['score'] = score.values
-    if element_pattern != 'NoneProvided':
+    if element_pattern[0] != 'NoneProvided':
         Focus = str(element_pattern[0]) if len(element_pattern) == 1 else str(element_pattern[0]) + '_' + str(element_pattern[-1])
         if ':' in Focus:
             Focus = Focus.replace(':', '_')
