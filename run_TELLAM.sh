@@ -129,7 +129,7 @@ SIZE=$size
 COVERAGE=$coverage
 FULL=$full
 EOL
-echo "COMMAND_USED=\"$0 $@\"" >> "$config_file"
+echo "COMMAND_USED=\"$0 $*\"" >> "$config_file"
 
 echo "Configuration file created at $config_file"
 echo "Launching the Python pipeline..."
