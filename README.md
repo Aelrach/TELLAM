@@ -30,6 +30,15 @@ conda activate TELLAM
 pip install -r requirements.txt 
 ```
 Nice step-by-step tutorial on how to get miniconda up and running from the command line : https://medium.com/@rajiitmandi21/installing-miniconda-and-setting-up-conda-environments-on-linux-0c114e76a324
+
+### 3. Verify that you have all necessary files
+Before using TELLAM, make sure you have these 3 things : a locus-level annotation file of transposable elements insertions in the genome of interest, a BED file containing all exons of the genome and finally, a FASTA file containing consensus sequences for each element you wish to analyze.
+- If you are analyzing human or mouse samples, we recommend that you download the locus-level annotation file provided by the TElocal team at (https://www.mghlab.org/software/telocal)
+- You can obtain the BED file of exons by using USCS's Table Browser
+- The FASTA file with consensus sequences is provided within TELLAM. It was downloaded from UCSC's Database. You can provide your own.
+
+You're all set to start using TELLAM !
+
 # Usage
 Usage: 
 ```bash
