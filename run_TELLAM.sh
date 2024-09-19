@@ -129,7 +129,7 @@ SIZE=$size
 COVERAGE=$coverage
 FULL=$full
 EOL
-echo "COMMAND_USED=\"$0 ${@}\"" >> "$config_file"
+echo "COMMAND_USED=\"$0 -d $deseq2_table -state $bam_state -chr $chr_prefix -name $condition_name -control $control_name -elements $element_pattern -annotation $annotation -raw $raw_bam_folder -exons $exons_bed -threads $threads -fb $filtered_bam_folder -directory $directory -consensus $consensus -window $window -context $context -size $size -coverage $coverage -full $full\"" >> "$config_file"
 
 echo "Configuration file created at $config_file"
 echo "Launching the Python pipeline..."
