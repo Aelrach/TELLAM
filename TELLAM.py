@@ -243,10 +243,11 @@ def makeNiceDESEQ(deseq2_table, annotation, element_pattern, directory, conditio
     data = pd.read_table(deseq2_table, sep='\t')
     
     data["ID"] = np.array(data.index)
-    pattern = '|'.join(element_pattern)
-    
-    #Keep only specified elements
-    data = data[data["ID"].str.contains(pattern, regex=True)]
+    if element_pattern != 'NoneProvided':
+        pattern = '|'.join(element_pattern)
+        
+        #Keep only specified elements
+        data = data[data["ID"].str.contains(pattern, regex=True)]
 
     #Keep only Loci
     data = data[data["ID"].str.contains("dup")]
@@ -313,12 +314,14 @@ def makeNiceDESEQ(deseq2_table, annotation, element_pattern, directory, conditio
     score = new_data['RankMetric']
 
     niceDESEQ['score'] = score.values
-
-    Focus = str(element_pattern[0]) if len(element_pattern) == 1 else str(element_pattern[0]) + '_' + str(element_pattern[-1])
-    if ':' in Focus:
-        Focus = Focus.replace(':', '_')
-    if ' ' in Focus:
-        Focus = Focus.replace(' ', '_')
+    if element_pattern != 'NoneProvided':
+        Focus = str(element_pattern[0]) if len(element_pattern) == 1 else str(element_pattern[0]) + '_' + str(element_pattern[-1])
+        if ':' in Focus:
+            Focus = Focus.replace(':', '_')
+        if ' ' in Focus:
+            Focus = Focus.replace(' ', '_')
+    else:
+        Focus = 'ALL'
     if directory[-1] == '/':
         directory = directory[:-1]
     niceDESEQ.to_csv(f"{directory}/{Focus}_{condition}vs{control}.txt", sep='\t', index=False)
