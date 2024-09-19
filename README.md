@@ -1,5 +1,5 @@
 # TELLAM (Transposable Elements Locus Level Analysis Metric)
-Pipeline for Transposable Elements Locus Level Analysis. Created to analyze results derived from RNAseq experiments. It uses DESeQ2 tables, exon-less and strand separated bam files to compute a metric, TELLAM, on each annotated loci given in input. It then determines which are activated or not using a small Random Forest Classifier.
+Pipeline for Transposable Elements (TEs) Locus Level Analysis. This pipeline was created to analyze results derived from RNAseq experiments. It leverages differential expression analysis and genomic context to analyze TE activity by using DESeQ2 tables, exon-less and strand separated bam files to compute a metric, TELLAM, on each annotated loci given in input. It then determines which are activated or not using a small Random Forest Classifier.
 
 # Requirements
 - bedtools
@@ -32,12 +32,9 @@ pip install -r requirements.txt
 Nice step-by-step tutorial on how to get miniconda up and running from the command line : https://medium.com/@rajiitmandi21/installing-miniconda-and-setting-up-conda-environments-on-linux-0c114e76a324
 
 ### 3. Verify that you have these auxilliary files
-Before using TELLAM, make sure you have these 3 things : a **locus-level annotation file** of transposable elements insertions in the genome of interest, a **BED file** containing **all exons** of the genome and finally, a **FASTA file** containing **consensus sequences** for each element you wish to analyze.
+Before using TELLAM, make sure you have these 2 things : a **locus-level annotation file** of transposable elements insertions in the genome of interest and a **FASTA file** containing **consensus sequences** for each element you wish to analyze.
 - If you are analyzing human or mouse samples, we recommend that you download the locus-level annotation file provided by the **TElocal team at (https://www.mghlab.org/software/telocal)**
-- You can obtain the BED file of exons by using **USCS's Table Browser**
 - The **FASTA file with consensus sequences is provided within TELLAM**. It was downloaded from UCSC's Database. **You can provide your own.**
-
-You're all set to start using TELLAM !
 
 # Usage
 Usage: 
@@ -73,8 +70,8 @@ Example:
       bash run_TELLAM.sh -d DESEQ_AZAvsDMSO.txt -state f -fb path_to_AZA_filtered_bam -chr chr -name AZA -control DMSO -elements 'L1:LINE',LTR
 ```
 
-In this command the user is specifying that exon-less, strand separated bam files (both forward and reverse in the same folder) for the TREATED CONDITION, are located in path_to_filtered_bam. 
-Specifies that the bam files were generated using chr1, chr2 etc.. chromosome naming and to only analyze loci which are L1:LINE or LTR.  
+In this command the user is specifying that exon-less, strand separated bam files (both forward and reverse in the same folder) for the **TREATED CONDITION**, are **all** located in path_to_filtered_bam. 
+The command also specifies that the bam files were generated using chr1, chr2 etc.. chromosome naming and to only analyze loci which are L1:LINE or LTR.  
 
 Note that to specify several patterns you must give eahc pattern in a comma separated format (No spaces allowed between patterns). 
 **e.g VALID : L1:LINE,LTR,AluJo / NOT VALID : L1:LINE, LTR, AluJo**
@@ -84,6 +81,9 @@ Beware that the rows of your deseq table MUST have as ID the name of the loci. T
 "family"_dup"copy_name or number":"family":"Type":"Class"  
 
 **e.g AluJo_dup71176:AluJo:Alu:SINE**
+
+# Note on using TELLAM with unfiltered BAM files (argument -state set to 'r')
+If you plan to use TELLAM with raw BAM files, you **MUST** to specify a **BED file containing all exons** of your genome of interest in the **-elements argument**. Before running the actual TELLAM pipeline, the script will produce exon-less, strand separated bam files. This will take significantely more time to run.
 
 # Output
 The pipeline will produce a processed version of your DESeQ2 table as an intermediary file but the main output is a Table in bed format containing the following columns : 
