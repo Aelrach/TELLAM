@@ -1,5 +1,5 @@
 # TELLAM (Transposable Elements Locus Level Analysis Metric)
-Pipeline for Transposable Elements (TEs) Locus Level Analysis. This pipeline was created to analyze results derived from RNAseq experiments. It leverages differential expression analysis and genomic context to analyze TE activity by using DESeQ2 tables, exon-less and strand separated bam files to compute a metric, TELLAM, on each annotated loci given in input. It then determines which are activated or not using a small Random Forest Classifier.
+Pipeline for Transposable Elements (TEs) Locus Level Analysis. This pipeline was created to analyze results derived from RNAseq experiments. It leverages differential expression analysis and genomic context to analyze TE activity by using a DESeQ2 table, exon-less and strand separated bam files to compute a metric, TELLAM, on each annotated loci given in input. It then determines which are activated or not using a small Random Forest Classifier.
 
 # Requirements
 - bedtools
@@ -36,6 +36,8 @@ Before using TELLAM, make sure you have these 2 things : a **locus-level annotat
 - If you are analyzing human or mouse samples, we recommend that you download the locus-level annotation file provided by the **TElocal team at (https://www.mghlab.org/software/telocal)**
 - The **FASTA file with consensus sequences is provided within TELLAM**. It was downloaded from UCSC's Database (https://hgwdev.gi.ucsc.edu/~max/kznf/hg38reps/hg38/seqs/). **You can provide your own.**
 
+### 4. DESeQ2 table format
+Your deseq2 table should be a tab ('\t') delimited file and have the same column format as the file exemple_DESEQ2.txt
 # Usage
 Usage: 
 ```bash
@@ -43,7 +45,7 @@ bash run_TELLAM.sh -d <deseq2_table> -state <bam_state> -chr <chr_prefix> -name 
 ```
 
 ### Required arguments:
-- `-d`          Path to the DESeq2 table (e.g., `results.csv`)
+- `-d`          Path to the DESeq2 table (e.g., `results.txt`, )
 - `-state`      State of BAM files: `'r'` for raw BAM files or `'f'` for strand-separated AND exon-less filtered BAM files
 - `-chr`        Prefix used to identify chromosomes in BAM files: `'chr'` or `'None'`
 - `-name`       Name to refer to the condition (e.g., `'AZA'`)
