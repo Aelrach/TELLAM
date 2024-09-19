@@ -25,10 +25,9 @@ cd TELLAM
 It's recommended to use a virtual environment to manage dependencies:
 
 ```bash
-conda -n TELLAM
+conda create --name TELLAM python=3.10
 conda activate TELLAM
-conda install python=3.10
-pip install -r requirements.txt
+pip install -r requirements.txt 
 ```
 Nice step-by-step tutorial on how to get miniconda up and running from the command line : https://medium.com/@rajiitmandi21/installing-miniconda-and-setting-up-conda-environments-on-linux-0c114e76a324
 # Usage
@@ -62,7 +61,7 @@ bash run_TELLAM.sh -d <deseq2_table> -state <bam_state> -chr <chr_prefix> -name 
 
 Example:
 ```bash
-      bash run_TELLAM.sh -d DESEQ_AZAvsDMSO.txt -state f -fb path_to_AZA_filtered_bam -chr chr -name AZA -control DMSO -elements 'L1:LINE',LTR "
+      bash run_TELLAM.sh -d DESEQ_AZAvsDMSO.txt -state f -fb path_to_AZA_filtered_bam -chr chr -name AZA -control DMSO -elements 'L1:LINE',LTR
 ```
 
 In this command the user is specifying that exon-less, strand separated bam files (both forward and reverse in the same folder) for the TREATED CONDITION, are located in path_to_filtered_bam. 
