@@ -243,7 +243,7 @@ def makeNiceDESEQ(deseq2_table, annotation, element_pattern, directory, conditio
     data = pd.read_table(deseq2_table, sep='\t')
     
     data["ID"] = np.array(data.index)
-    print(element_pattern)
+    print(data["ID"])
     if element_pattern[0] != 'NoneProvided':
         pattern = '|'.join(element_pattern)
         
