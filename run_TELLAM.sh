@@ -8,7 +8,7 @@ function show_help {
     echo "Usage: $(basename $0) -d <deseq2_table> -state <bam_state> -chr <chr_prefix> -name <condition_name> -control <control_name> -annotation path_to_annotations -elements <element_pattern> [options]"
     echo
     echo "Required arguments:"
-    echo "  -d          Path to the DESeq2 table (e.g., results.csv)"
+    echo "  -d          Path to the DESeq2 table (e.g., results.txt, must be a tab delimited file and have same column format as exemple_DESEQ2.txt file)"
     echo "  -state      State of bam files, 'r' for raw bam files or 'f' for strand separated AND exon-less filtered bam"
     echo "  -chr        Prefix used to identify chromosomes in bam files, 'chr' or 'None'"
     echo "  -name       Name to refer to the condition (e.g., 'AZA')"
