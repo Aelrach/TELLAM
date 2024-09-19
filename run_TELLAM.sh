@@ -5,7 +5,7 @@ script_dir=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
 
 # Function to display the help message
 function show_help {
-    echo "Usage: $(basename $0) -d <deseq2_table> -state <bam_state> -chr <chr_prefix> -name <condition_name> -control <control_name> -elements <element_pattern> [options]"
+    echo "Usage: $(basename $0) -d <deseq2_table> -state <bam_state> -chr <chr_prefix> -name <condition_name> -control <control_name> -annotation path_to_annotations -elements <element_pattern> [options]"
     echo
     echo "Required arguments:"
     echo "  -d          Path to the DESeq2 table (e.g., results.csv)"
@@ -13,15 +13,15 @@ function show_help {
     echo "  -chr        Prefix used to identify chromosomes in bam files, 'chr' or 'None'"
     echo "  -name       Name to refer to the condition (e.g., 'AZA')"
     echo "  -control    Name to refer to the control (e.g., 'DMSO')"
-    echo "  -elements   List of patterns found in the IDs of the annotation file used to filter rows of deseq2 table (e.g., 'LTR')"
+    echo "  -annotation Path to the annotation file"
     echo
     echo "Optional arguments:"
+    echo "  -elements   List of patterns found in the IDs of the annotation file used to filter rows of deseq2 table (e.g., 'LTR'). /!\ If this is not set, will analyze ALL loci !!"
     echo "  -raw        Must be set if -state is 'r', Path to the folder containing all TREATED CONDITION ONLY raw bam files"
     echo "  -exons      Must be set if -state is 'r', Path to the bed file containing all exons of genome. VERIFY that chromosome naming of this file and that of your bam files match"
     echo "  -threads    Number of threads to use (default is 8)"
     echo "  -fb         Must be set if -state is 'f', Path to the folder containing all TREATED CONDITION ONLY forward and reverse bam files"
     echo "  -directory  Project directory to save files (default is \${name}_TELLAM)"
-    echo "  -annotation Path to the annotation file (default is 'TELLAM/GRCh38_Ensembl_rmsk_TE.gtf.locInd.locations')"
     echo "  -consensus  Path to the consensus fasta file (default is 'TELLAM/UCSC_TE_consensus.fa.txt')"
     echo "  -window     Window size in base pairs used to compute 3' and 5' context (default is 3000bp)"
     echo "  -context    [0,1], context ratio threshold below which exponential decrease of the context effect starts. (default is 0.95)"
@@ -30,7 +30,7 @@ function show_help {
     echo "  -full       [0,1], Proportion of consensus size above which the loci is considered full_length (default is 0.9)"
     echo
     echo "Example:"
-    echo "  $(basename $0) -d DESEQ.txt -state f -fb path_to_filtered_bam -chr chr -name AZA -control DMSO -elements 'L1:LINE',LTR "
+    echo "  $(basename $0) -d DESEQ.txt -state f -fb path_to_filtered_bam -chr chr -name AZA -control DMSO -annotation path_to_annotations -elements 'L1:LINE',LTR "
     exit 1
 }
 
@@ -61,9 +61,9 @@ while [[ "$#" -gt 0 ]]; do
 done
 
 # Default values if not set
+element_pattern="${element_pattern:-NoneProvided}"
 threads="${threads:-8}"
 directory="${directory:-$script_dir/${condition_name}vs${control_name}_TELLAM}"
-annotation="${annotation:-$script_dir/GRCh38_Ensembl_rmsk_TE.gtf.locInd.locations}"
 consensus="${consensus:-$script_dir/UCSC_TE_consensus.fa.txt}"
 window="${window:-3000}"
 context="${context:-0.95}"
@@ -72,7 +72,7 @@ coverage="${coverage:-0.06}"
 full="${full:-0.9}"
 
 # Check for required arguments
-if [ -z "$deseq2_table" ] || [ -z "$bam_state" ] || [ -z "$chr_prefix" ] || [ -z "$condition_name" ] || [ -z "$control_name" ] || [ -z "$element_pattern" ] || [ -z "$annotation" ]; then
+if [ -z "$deseq2_table" ] || [ -z "$bam_state" ] || [ -z "$chr_prefix" ] || [ -z "$condition_name" ] || [ -z "$control_name" ] || [ -z "$annotation" ]; then
     echo "Error: Missing required arguments."
     show_help
 fi
